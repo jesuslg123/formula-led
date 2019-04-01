@@ -3,6 +3,7 @@
 #define LED_PIN 6
 
 #define PLAYER1_PIN 7
+#define PLAYER2_PIN 8
 
 #define ACCELERATION 0.3
 #define FRICTION 0.015
@@ -19,6 +20,7 @@ struct Player {
   int position;
   int loop;
   float speed;
+  CRGB::HTMLColorCode color;
 };
 
 struct Player player1;
@@ -26,7 +28,8 @@ struct Player player2;
 
 void setup() {
 //  pinMode(PLAYER1_PIN, INPUT_PULLUP);
-  initPlayer(&player1, PLAYER1_PIN);
+  initPlayer(&player1, PLAYER1_PIN, CRGB::Red);
+  initPlayer(&player2, PLAYER2_PIN, CRGB::Green);
 
   FastLED.addLeds < NEOPIXEL, LED_PIN > (leds, NUM_LEDS);
 
@@ -35,18 +38,21 @@ void setup() {
 
 void loop() {
   movePlayer(&player1);
+  movePlayer(&player2);
   drawPlayer(player1);
+  drawPlayer(player2);
 
   delay(5);
 }
 
-void initPlayer(struct Player *player, int pin) {
+void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color) {
   player->buttonPin = pin;
   player->buttonState = LOW;
   player->prevPosition = 0;
   player->position = 0;
   player->loop = 0;
   player->speed = 0.0;
+  player->color = color;
 }
 
 bool buttonReleased(struct Player *player) {
@@ -76,12 +82,12 @@ void movePlayer(struct Player *player) {
   player->prevPosition = player->position;
   player->position = (int)(player->position + player->speed) % NUM_LEDS;
 
-//  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position);
+  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position);
 }
 
 void drawPlayer(struct Player player) {
   if (player.prevPosition != player.position) {
-    leds[player.position] = CRGB::Blue;
+    leds[player.position] = player.color;
     leds[player.prevPosition] = CRGB::Black;
     FastLED.show(); 
   }
