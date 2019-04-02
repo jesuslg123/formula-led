@@ -30,6 +30,7 @@ struct Player {
 struct Player player1;
 struct Player player2;
 
+int raceCountdown = 3;
 bool raceFinished = false;
 
 void setup() {
@@ -44,6 +45,13 @@ void setup() {
 }
 
 void loop() {
+  if (raceCountdown >= 0) {
+    delay(random(500, 1001));
+    drawCountdown(raceCountdown);
+    raceCountdown--;
+    return;
+  }
+  
   if (raceFinished) {
     delay(1000);
     return;
@@ -112,6 +120,22 @@ void movePlayer(struct Player *player) {
   //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }
 
+void drawCountdown(int countdownStage) {
+  switch (countdownStage) {
+    case 3:
+      setTrackColor(CRGB::Blue);
+      break;
+    case 2:
+      setTrackColor(CRGB::Red);
+      break;
+    case 1:
+      setTrackColor(CRGB::Green);
+      break;
+    default:
+      clearTrack();
+  }
+}
+
 void drawPlayer(struct Player player) {
   if (player.position != player.prevPosition || (player.position == 0 && player.loop == 0)) {
     for (int j = 0; j < player.loop + 1; j++) {
@@ -129,6 +153,10 @@ void drawPlayer(struct Player player) {
     FastLED.show();
   }
 }
+
+// see also
+// Copy ten led colors from leds[src .. src+9] to leds[dest .. dest+9]
+// memmove( &leds[dest], &leds[src], 10 * sizeof( CRGB) );
 
 bool isRaceFinished() {
   return player1.isWinner || player2.isWinner;
