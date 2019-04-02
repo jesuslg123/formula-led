@@ -7,8 +7,8 @@
 
 #define ACCELERATION 0.4
 #define FRICTION 0.03
-#define HIGHSPEED 4
-#define MAX_LOOPS 5
+#define HIGHSPEED 3
+#define MAX_LOOPS 2
 
 //#define COLOR_PETROL 0x007575
 //#define COLOR_LINKEDIN 0x0077B5
@@ -48,10 +48,10 @@ void loop() {
     delay(1000);
     return;
   }
-  
+
   movePlayer(&player1);
   movePlayer(&player2);
-  drawPlayer(player1);  
+  drawPlayer(player1);
   drawPlayer(player2);
 
   if (isRaceFinished()) {
@@ -59,7 +59,7 @@ void loop() {
     drawWinner(winner);
     raceFinished = true;
   }
-  
+
   delay(15);
 }
 
@@ -79,7 +79,7 @@ bool buttonReleased(struct Player *player) {
   int previousState = player->buttonState;
   player->buttonState = digitalRead(player->buttonPin);
 
-//  Serial.println(player.buttonPin);
+  //  Serial.println(player.buttonPin);
 
   if (previousState == HIGH && player->buttonState == LOW) {
     return true;
@@ -102,14 +102,14 @@ void movePlayer(struct Player *player) {
   player->prevPosition = player->position;
   player->position = (int)(player->position + player->speed) % NUM_LEDS;
 
-  if (player->position < player->prevPosition) { 
+  if (player->position < player->prevPosition) {
     player->loop += 1;
   }
 
   if (player->loop == MAX_LOOPS) {
     player->isWinner = true;
   }
-//  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
+  //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }
 
 void drawPlayer(struct Player player) {
@@ -117,16 +117,16 @@ void drawPlayer(struct Player player) {
     for (int j = 0; j < player.loop + 1; j++) {
       int index = modulo(player.prevPosition - j, NUM_LEDS);
       leds[index] = CRGB::Black;
-//      Serial.println("Black " + (String)index);
+      //      Serial.println("Black " + (String)index);
     }
-    
+
     for (int j = 0; j < player.loop + 1; j++) {
       int index = modulo(player.position - j, NUM_LEDS);
       leds[index] = player.speed > HIGHSPEED ? player.highSpeedColor : player.color;
-//      Serial.println("LED " + (String)index);
+      //      Serial.println("LED " + (String)index);
     }
-  
-    FastLED.show(); 
+
+    FastLED.show();
   }
 }
 
@@ -151,13 +151,13 @@ void clearTrack() {
 }
 
 void setTrackColor(CRGB::HTMLColorCode color) {
-  for(int i = 0; i < NUM_LEDS; i++) {
+  for (int i = 0; i < NUM_LEDS; i++) {
     leds[i] = color;
   }
   FastLED.show();
 }
 
 // utilities
-int modulo(int x,int n){
+int modulo(int x, int n) {
   return (x % n + n) % n;
 }
