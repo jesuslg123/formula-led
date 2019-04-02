@@ -2,16 +2,13 @@
 #define NUM_LEDS 300
 #define LED_PIN 6
 
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27,16,2);
-
 #define PLAYER1_PIN 7
 #define PLAYER2_PIN 8
 
-#define ACCELERATION 0.3
-#define FRICTION 0.015
+#define ACCELERATION 0.4
+#define FRICTION 0.03
 #define HIGHSPEED 4
+#define MAX_LOOPS 5
 
 //#define COLOR_PETROL 0x007575
 //#define COLOR_LINKEDIN 0x0077B5
@@ -25,6 +22,7 @@ struct Player {
   int position;
   int loop;
   float speed;
+  bool isWinner;
   CRGB::HTMLColorCode color;
   CRGB::HTMLColorCode highSpeedColor;
 };
@@ -32,12 +30,9 @@ struct Player {
 struct Player player1;
 struct Player player2;
 
-
+bool raceFinished = false;
 
 void setup() {
-  initLCD();
-
-  
   initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
   initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
 
@@ -49,34 +44,23 @@ void setup() {
 }
 
 void loop() {
+  if (raceFinished) {
+    delay(1000);
+    return;
+  }
+  
   movePlayer(&player1);
   movePlayer(&player2);
-
   drawPlayer(player1);  
   drawPlayer(player2);
+
+  if (isRaceFinished()) {
+    struct Player winner = findWinner(player1, player2);
+    drawWinner(winner);
+    raceFinished = true;
+  }
   
-  //updateLCD();
-  
-  delay(5);
-}
-
-
-
-
-void initLCD() {
-  lcd.init();
-  lcd.backlight();
-} 
-
-
-void updateLCD() {
-  printPlayer(player1, 0);
-  printPlayer(player2, 1);
-}
-
-void printPlayer(struct Player player, int line) {
-  lcd.setCursor(0, line);
-  lcd.print((char)236 + ":" + (String)player.loop + " " + (char)62 + ":" + (String)player.speed + "m/s");
+  delay(15);
 }
 
 void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB::HTMLColorCode highSpeedColor) {
@@ -86,6 +70,7 @@ void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB:
   player->position = 0;
   player->loop = 0;
   player->speed = 0.0;
+  player->isWinner = false;
   player->color = color;
   player->highSpeedColor = highSpeedColor;
 }
@@ -121,6 +106,9 @@ void movePlayer(struct Player *player) {
     player->loop += 1;
   }
 
+  if (player->loop == MAX_LOOPS) {
+    player->isWinner = true;
+  }
 //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }
 
@@ -142,9 +130,29 @@ void drawPlayer(struct Player player) {
   }
 }
 
+bool isRaceFinished() {
+  return player1.isWinner || player2.isWinner;
+}
+
+struct Player findWinner(struct Player player1, struct Player player2) {
+  if (player1.isWinner) {
+    return player1;
+  } else if (player2.isWinner) {
+    return player2;
+  }
+}
+
+void drawWinner(struct Player winner) {
+  setTrackColor(winner.color);
+}
+
 void clearTrack() {
+  setTrackColor(CRGB::Black);
+}
+
+void setTrackColor(CRGB::HTMLColorCode color) {
   for(int i = 0; i < NUM_LEDS; i++) {
-    leds[i] = CRGB::Black;
+    leds[i] = color;
   }
   FastLED.show();
 }
