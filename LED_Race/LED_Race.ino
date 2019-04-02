@@ -43,16 +43,19 @@ void setup() {
 
   FastLED.addLeds < NEOPIXEL, LED_PIN > (leds, NUM_LEDS);
 
+  clearTrack();
+
   Serial.begin(9600);
 }
 
 void loop() {
   movePlayer(&player1);
   movePlayer(&player2);
-  drawPlayer(player1);
+
+  drawPlayer(player1);  
   drawPlayer(player2);
   
-  updateLCD();
+  //updateLCD();
   
   delay(5);
 }
@@ -118,13 +121,23 @@ void movePlayer(struct Player *player) {
     player->loop += 1;
   }
 
-  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
+//  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }
 
 void drawPlayer(struct Player player) {
-  if (player.prevPosition != player.position) {
-    leds[player.position] = player.speed < HIGHSPEED ? player.color : player.highSpeedColor;
-    leds[player.prevPosition] = CRGB::Black;
+  if (player.position != player.prevPosition || (player.position == 0 && player.loop == 0)) {
+    for (int j = 0; j < player.loop + 1; j++) {
+      int index = modulo(player.prevPosition - j, NUM_LEDS);
+      leds[index] = CRGB::Black;
+//      Serial.println("Black " + (String)index);
+    }
+    
+    for (int j = 0; j < player.loop + 1; j++) {
+      int index = modulo(player.position - j, NUM_LEDS);
+      leds[index] = player.speed > HIGHSPEED ? player.highSpeedColor : player.color;
+//      Serial.println("LED " + (String)index);
+    }
+  
     FastLED.show(); 
   }
 }
@@ -134,4 +147,9 @@ void clearTrack() {
     leds[i] = CRGB::Black;
   }
   FastLED.show();
+}
+
+// utilities
+int modulo(int x,int n){
+  return (x % n + n) % n;
 }
