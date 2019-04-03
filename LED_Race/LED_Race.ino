@@ -7,8 +7,8 @@
 
 #define ACCELERATION 0.4
 #define FRICTION 0.03
-#define HIGHSPEED 2
-#define MAX_SPEED 2.5
+#define HIGHSPEED 3
+#define MAX_SPEED 3.6
 #define MAX_LOOPS 5
 
 //#define COLOR_PETROL 0x007575
