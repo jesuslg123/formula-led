@@ -62,8 +62,8 @@ void loop() {
 
   movePlayer(&player1);
   movePlayer(&player2);
-  drawPlayer(player1);
-  drawPlayer(player2);
+  drawPlayer(&player1);
+  drawPlayer(&player2);
 
   if (isRaceFinished()) {
     struct Player winner = findWinner(player1, player2);
@@ -105,7 +105,7 @@ void movePlayer(struct Player *player) {
   if (buttonReleased(player)) {
     player->speed += ACCELERATION; // acceleration
 
-    Serial.println("P speed: " + (String)player->speed + " offTrack: " + (String)player->isOffTrack + " blink: " + (String)player->blinking);
+//    Serial.println("P speed: " + (String)player->speed + " offTrack: " + (String)player->isOffTrack + " blink: " + (String)player->blinking);
 
     if (player->isOffTrack) {
       player->blinking = !(player->blinking);
@@ -116,8 +116,6 @@ void movePlayer(struct Player *player) {
 
   if (player->speed < 0) {
     player->speed = 0;
-  } else if (player->speed > 1 && player->isOffTrack) {
-    player->isOffTrack = false;
   } else if (player->speed >= MAX_SPEED) {
     player->speed = 0;
     player->isOffTrack = true;
@@ -152,30 +150,36 @@ void drawCountdown(int countdownStage) {
   }
 }
 
-void drawPlayer(struct Player player) {
-  if (player.isOffTrack) {    
-    CRGB::HTMLColorCode offTrackColor = player.blinking ? player.color : CRGB::Black;
-    
-    drawOnTrack(player.position + 1, 1, offTrackColor);
-    drawOnTrack(player.position - player.loop - 1, 1, offTrackColor);
-  } else 
-  if (player.position != player.prevPosition || (player.position == 0 && player.loop == 0) || ledsAreBlack(player.position, player.loop)) {
-    drawOnTrack(player.prevPosition, player.loop + 1, CRGB::Black);
-    drawOnTrack(player.position, player.loop + 1, playerColor(&player));
-  }
+void drawPlayer(struct Player *player) {
+  if (player->isOffTrack) {    
+    // draw an explosion
+    CRGB::HTMLColorCode offTrackColor = player->blinking ? player->color : CRGB::Black;
 
-  FastLED.show();
+    drawOnTrack(player->position + 1, 1, offTrackColor);
+    drawOnTrack(player->position - player->loop - 1, 1, offTrackColor);
+
+    if (player->speed >= 1 && !player->blinking) {
+      player->isOffTrack = false;
+      // clear the back of the explosion
+      drawOnTrack(player->prevPosition - player->loop - 1, 1, CRGB::Black);
+    }
+
+    FastLED.show();
+  }
+    
+  if (player->position != player->prevPosition || (player->position == 0 && player->loop == 0) || ledsAreBlack(player->position, player->loop)) {
+    // draw the player
+    drawOnTrack(player->prevPosition, player->loop + 1, CRGB::Black);
+    drawOnTrack(player->position, player->loop + 1, playerColor(player));
+
+    FastLED.show();
+  }
 }
 
 void drawOnTrack(int position, int length, CRGB::HTMLColorCode color) {
   for (int j = 0; j < length; j++) {
     int index = modulo(position - j, NUM_LEDS);
-
-    if (color == CRGB::Black) {
-      leds[index] = color;
-    } else {
-      leds[index] += color;
-    }
+    leds[index] = color;
   }
 }
 
@@ -186,10 +190,6 @@ CRGB::HTMLColorCode playerColor(struct Player *player) {
     return player->color;
   }
 }
-
-// see also
-// Copy ten led colors from leds[src .. src+9] to leds[dest .. dest+9]
-// memmove( &leds[dest], &leds[src], 10 * sizeof( CRGB) );
 
 bool isRaceFinished() {
   return player1.isWinner || player2.isWinner;
@@ -212,9 +212,6 @@ void clearTrack() {
 }
 
 void setTrackColor(CRGB::HTMLColorCode color) {
-//  for (int i = 0; i < NUM_LEDS; i++) {
-//    leds[i] = color;
-//  }
   leds = color;
   FastLED.show();
 }
@@ -229,7 +226,7 @@ bool ledsAreBlack(int index, int length) {
 
   for (int i = 0; i < length; i++) {
     int idx = modulo(index - i, NUM_LEDS);
-    res &= (leds[idx].r == 0 && leds[idx].g == 0 && leds[idx].b == 0);
+    res |= (leds[idx].r == 0 && leds[idx].g == 0 && leds[idx].b == 0);
   }
   
   return res;
