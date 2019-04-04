@@ -21,7 +21,7 @@ You will need:
   * 2x Buttons
   * 1x 1000 µF capacitor
   * 2x 10kΩ resistors (for the buttons)
-  * 1x 470Ω resistor (fro the LED strip) but change it according to your power supply
+  * 1x 470Ω resistor (for the LED strip) but change it according to your power supply
   * Optional: 5V 2A power supply (you may have to change the resistors and the capacitor)
   * All the necessary cables to connect all the stuff above
 * Components you can 3d-print:
