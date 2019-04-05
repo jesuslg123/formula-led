@@ -38,7 +38,7 @@ You will need:
   * Optional: 5V 2A power supply (you may have to change the resistors and the capacitor)
   * All the necessary cables to connect all the stuff above
 * Components you can 3d-print:
-  * Controllers
+  * Controllers ([Player 1](https://source.xing.com/hackweek/arduino-led-racing/blob/master/3D/Player%201.stl), [Player 2](https://source.xing.com/hackweek/arduino-led-racing/blob/master/3D/Player%202.stl))
   * Base
 * Software:
   * Arduino IDE
