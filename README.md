@@ -1,4 +1,4 @@
-# arduino-led-racing
+# Formula LED
 
 ## Team Members
 
