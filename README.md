@@ -10,8 +10,8 @@
 
 ### Special thanks to contributors
 
-* [@helios-aliaga](https://source.xing.com/helios-aliaga)
 * [@jordi-manuel](https://source.xing.com/jordi-manuel)
+* [@helios-aliaga](https://source.xing.com/helios-aliaga)
 
 ## Rules
 
