@@ -92,8 +92,6 @@ bool buttonReleased(struct Player *player) {
   int previousState = player->buttonState;
   player->buttonState = digitalRead(player->buttonPin);
 
-  //  Serial.println(player.buttonPin);
-
   if (previousState == HIGH && player->buttonState == LOW) {
     return true;
   }
