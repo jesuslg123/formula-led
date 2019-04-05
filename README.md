@@ -1,5 +1,18 @@
 # arduino-led-racing
 
+## Team Members
+
+### Dev Team
+
+* [@jesus-lopez](https://source.xing.com/jesus-lopez)
+* [@aaron-ciaghi](https://source.xing.com/aaron-ciaghi)
+* [@sarah-seitz](https://source.xing.com/sarah-seitz)
+
+### Special thanks to contributors
+
+* [@helios-aliaga](https://source.xing.com/helios-aliaga)
+* [@jordi-manuel](https://source.xing.com/jordi-manuel)
+
 ## Rules
 
 * There are two players: red and blue
