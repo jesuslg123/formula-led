@@ -8,7 +8,7 @@ See the project on Hackster.io: https://www.hackster.io/xing-hackweek/formula-le
 
 * [jesus-lopez](https://github.com/jesuslg123)
 * [aaron-ciaghi](https://github.com/aaronsama)
-* sarah-seitz
+* [sarah-seitz](https://github.com/SarahNox)
 
 ### Special thanks to contributors
 
