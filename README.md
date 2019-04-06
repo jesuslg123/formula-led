@@ -6,8 +6,8 @@ See the project on Hackster.io: https://www.hackster.io/xing-hackweek/formula-le
 
 ### Dev Team
 
-* jesus-lopez(https://github.com/jesuslg123)
-* aaron-ciaghi(https://github.com/aaronsama)
+* [jesus-lopez](https://github.com/jesuslg123)
+* [aaron-ciaghi](https://github.com/aaronsama)
 * sarah-seitz
 
 ### Special thanks to contributors
