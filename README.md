@@ -6,14 +6,14 @@ See the project on Hackster.io: https://www.hackster.io/xing-hackweek/formula-le
 
 ### Dev Team
 
-* [@jesus-lopez](https://source.xing.com/jesus-lopez)
-* [@aaron-ciaghi](https://source.xing.com/aaron-ciaghi)
-* [@sarah-seitz](https://source.xing.com/sarah-seitz)
+* jesus-lopez(https://github.com/jesuslg123)
+* aaron-ciaghi(https://github.com/aaronsama)
+* sarah-seitz
 
 ### Special thanks to contributors
 
-* [@jordi-manuel](https://source.xing.com/jordi-manuel)
-* [@helios-aliaga](https://source.xing.com/helios-aliaga)
+* jordi-manuel
+* [helios-aliaga](https://github.com/heliosam)
 
 ## Rules
 
