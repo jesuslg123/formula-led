@@ -1,9 +1,13 @@
 #include "FastLED.h"
+#include "pitches.h"
+
 #define NUM_LEDS 300
 #define LED_PIN 6
 
 #define PLAYER1_PIN 7
 #define PLAYER2_PIN 8
+
+#define SPEAKER_PIN 9
 
 #define ACCELERATION 0.4
 #define FRICTION 0.03
@@ -36,6 +40,12 @@ struct Player player2;
 int raceCountdown = 3;
 bool raceFinished = false;
 
+int raceStartMelody[3][4] = {
+  { NOTE_C5, NOTE_C5, NOTE_C5, NOTE_C6 },
+  { 700, 700, 700, 1000 },
+  { 1000, 1000, 1000, 1000 }
+};
+
 void setup() {
   initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
   initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
@@ -49,8 +59,17 @@ void setup() {
 
 void loop() {
   if (raceCountdown >= 0) {
-    delay(random(500, 1001));
+    int thisNote = 3 - raceCountdown;
+    int note = raceStartMelody[0][thisNote];
+    int noteDuration = raceStartMelody[1][thisNote];
+    int pause = raceStartMelody[2][thisNote];
+    
     drawCountdown(raceCountdown);
+
+    tone(SPEAKER_PIN, note, noteDuration);
+    delay(noteDuration + 700);
+    noTone(SPEAKER_PIN);
+    
     raceCountdown--;
     return;
   }
