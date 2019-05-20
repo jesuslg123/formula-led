@@ -9,6 +9,9 @@
 
 #define SPEAKER_PIN 9
 
+#define PLAYER1_TONE NOTE_CS4
+#define PLAYER2_TONE NOTE_DS4
+
 #define ACCELERATION 0.4
 #define FRICTION 0.03
 #define HIGHSPEED 3
@@ -32,6 +35,8 @@ struct Player {
   bool blinking;
   CRGB::HTMLColorCode color;
   CRGB::HTMLColorCode highSpeedColor;
+  int tone;
+  bool beeping;
 };
 
 struct Player player1;
@@ -47,8 +52,8 @@ int raceStartMelody[3][4] = {
 };
 
 void setup() {
-  initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
-  initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
+  initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green, PLAYER1_TONE);
+  initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow, PLAYER2_TONE);
 
   FastLED.addLeds < NEOPIXEL, LED_PIN > (leds, NUM_LEDS);
 
@@ -58,6 +63,8 @@ void setup() {
 }
 
 void loop() {
+  noTone(SPEAKER_PIN);
+  
   if (raceCountdown >= 0) {
     int thisNote = 3 - raceCountdown;
     int note = raceStartMelody[0][thisNote];
@@ -66,9 +73,8 @@ void loop() {
     
     drawCountdown(raceCountdown);
 
-    tone(SPEAKER_PIN, note, noteDuration);
+//    tone(SPEAKER_PIN, note, noteDuration);
     delay(noteDuration + 700);
-    noTone(SPEAKER_PIN);
     
     raceCountdown--;
     return;
@@ -84,6 +90,8 @@ void loop() {
   drawPlayer(&player1);
   drawPlayer(&player2);
 
+  playersBeep(&player1, &player2);
+
   if (isRaceFinished()) {
     struct Player winner = findWinner(player1, player2);
     drawWinner(winner);
@@ -93,7 +101,7 @@ void loop() {
   delay(15);
 }
 
-void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB::HTMLColorCode highSpeedColor) {
+void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB::HTMLColorCode highSpeedColor, int tone) {
   player->buttonPin = pin;
   player->buttonState = LOW;
   player->prevPosition = 0;
@@ -105,6 +113,8 @@ void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB:
   player->blinking = false;
   player->color = color;
   player->highSpeedColor = highSpeedColor;
+  player->tone = tone;
+  player->beeping = false;
 }
 
 bool buttonReleased(struct Player *player) {
@@ -121,8 +131,6 @@ bool buttonReleased(struct Player *player) {
 void movePlayer(struct Player *player) {
   if (buttonReleased(player)) {
     player->speed += ACCELERATION; // acceleration
-
-//    Serial.println("P speed: " + (String)player->speed + " offTrack: " + (String)player->isOffTrack + " blink: " + (String)player->blinking);
 
     if (player->isOffTrack) {
       player->blinking = !(player->blinking);
@@ -231,6 +239,24 @@ void clearTrack() {
 void setTrackColor(CRGB::HTMLColorCode color) {
   leds = color;
   FastLED.show();
+}
+
+// sounds
+
+void playersBeep(struct Player* player1, struct Player* player2) {
+  if (player1->beeping) {
+    playerBeep(player2);
+    player1->beeping = false;
+  } else {
+    playerBeep(player1);
+    player2->beeping = false;
+  }
+}
+
+void playerBeep(struct Player* player) {
+  player->beeping = true;
+  
+  tone(SPEAKER_PIN, player->tone * player->speed, 15);
 }
 
 // utilities
