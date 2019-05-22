@@ -1,4 +1,7 @@
+#include <FastLED.h>
+
 struct Player {
+  int id;
   int buttonPin;
   int buttonState;
   int prevPosition;
