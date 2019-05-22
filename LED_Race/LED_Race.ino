@@ -22,8 +22,8 @@ void setup() {
   connectWifi();
   setupMQTT();
   
-  initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
-  initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
+  initPlayer(&player1, 1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
+  initPlayer(&player2, 2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
 
   setupTrack();
 }
@@ -33,7 +33,11 @@ void loop() {
   if (raceCountdown >= 0) {
     drawCountdown(raceCountdown);
     raceStartSound(3 - raceCountdown);
-    delay(300);
+    delay(1000);
+
+    if (raceCountdown == 0) {
+      mqttStart();
+    }
     
     raceCountdown--;
     return;
@@ -49,8 +53,8 @@ void loop() {
   drawPlayer(&player1);
   drawPlayer(&player2);
 
-  //playerBeep(1, player1.speed);
-  //playerBeep(2, player2.speed);
+  playerBeep(player1.id, player1.speed);
+  playerBeep(player2.id, player2.speed);
 
   if (isRaceFinished()) {
     struct Player winner = findWinner(player1, player2);
@@ -63,7 +67,8 @@ void loop() {
   delay(15);
 }
 
-void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB::HTMLColorCode highSpeedColor) {
+void initPlayer(struct Player *player, int id, int pin, CRGB::HTMLColorCode color, CRGB::HTMLColorCode highSpeedColor) {
+  player->id = id;
   player->buttonPin = pin;
   player->buttonState = LOW;
   player->prevPosition = 0;
@@ -111,10 +116,12 @@ void movePlayer(struct Player *player) {
 
   if (player->position < player->prevPosition) {
     player->loop += 1;
+    mqttLoop(*player);
   }
 
   if (player->loop == MAX_LOOPS) {
     player->isWinner = true;
+    mqttEnd(*player);
   }
   //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }

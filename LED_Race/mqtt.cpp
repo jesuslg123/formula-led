@@ -1,13 +1,16 @@
 #include <ESP8266WiFi.h>
-
 #include <PubSubClient.h>
+#include <string>
+#include <sstream>
+#include "player.h"
+
 #define MAX_MSG_LEN (128)
 #define MQTT_PORT 1883
 
-//const IPAddress serverIPAddress(127, 0, 0, 1);
 const char* mqtt_server = "192.168.1.58";
 
-const char *topic = "player_one";
+char *topic_player = "player";
+char *topic_track = "track";
 
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
@@ -28,8 +31,8 @@ void connectMQTT() {
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
 
-      client.publish("mqtt_message", "hello arduino");
-      client.subscribe("mqtt_message");
+      client.publish("topic_track", "Connected!!!!!");
+      //client.subscribe("topic_track");
       
     } else {
       Serial.print("failed, rc=");
@@ -62,4 +65,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
     digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
   }
 
+}
+
+
+
+char* string2char(String command){
+    if(command.length()!=0){
+        char *p = const_cast<char*>(command.c_str());
+        return p;
+    }
+}
+
+
+void publish(char *topic, char *message) {
+  Serial.println("Topic: " + (String)topic + " Message: " + (String)message);
+  client.publish(topic, message);
+}
+
+
+void mqttLoop(Player player) {
+  publish(topic_player, string2char("{command: end, player: " + (String)player.id + ", loop: " + (String)player.loop + "}")); 
+}
+
+
+void mqttEnd(Player player) {
+  publish(topic_track, string2char("{command: end, winner: " + (String)player.id + " }")); 
+}
+
+void mqttStart() {
+  publish(topic_track, "{command: start}");
 }
