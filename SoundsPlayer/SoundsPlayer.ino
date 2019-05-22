@@ -1,9 +1,6 @@
 #include <Tone.h>
 #include "melody.h"
 
-#define RACE_START_TONE_1 1
-#define RACE_START_TONE_2 2
-
 // see https://forum.arduino.cc/index.php?topic=396450
 
 const byte numChars = 32;
@@ -106,5 +103,7 @@ void showParsedData() {
     raceStartSound(playerSpeed);
   } else if (message[0] == 'W') {
     flagPoleFanfare();
+  } else if (message[0] == 'M') {
+    matoyasCave();
   }
 }
