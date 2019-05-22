@@ -60,8 +60,8 @@ CRGB::HTMLColorCode playerColor(struct Player *player) {
   }
 }
 
-bool ledsAreBlack(int index, int length) {
-  bool res = true;
+boolean ledsAreBlack(int index, int length) {
+  boolean res = true;
 
   for (int i = 0; i < length; i++) {
     int idx = modulo(index - i, NUM_LEDS);

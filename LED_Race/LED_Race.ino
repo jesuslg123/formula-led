@@ -9,7 +9,7 @@ struct Player player1;
 struct Player player2;
 
 int raceCountdown = 3;
-bool raceFinished = false;
+boolean raceFinished = false;
 
 void setup() {
   initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
@@ -23,8 +23,8 @@ void setup() {
 void loop() {
   if (raceCountdown >= 0) {
     drawCountdown(raceCountdown);
-    int noteDuration = raceStartSound(3 - raceCountdown);
-    delay(noteDuration + 700);
+    raceStartSound(3 - raceCountdown);
+    delay(300);
     
     raceCountdown--;
     return;
@@ -47,7 +47,7 @@ void loop() {
     struct Player winner = findWinner(player1, player2);
     drawWinner(&winner);
     raceFinished = true;
-    flagPoleFanfare();
+    raceEndSound();
   }
 
   delay(15);
@@ -67,7 +67,7 @@ void initPlayer(struct Player *player, int pin, CRGB::HTMLColorCode color, CRGB:
   player->highSpeedColor = highSpeedColor;
 }
 
-bool buttonReleased(struct Player *player) {
+boolean buttonReleased(struct Player *player) {
   int previousState = player->buttonState;
   player->buttonState = digitalRead(player->buttonPin);
 
@@ -109,7 +109,7 @@ void movePlayer(struct Player *player) {
   //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
 }
 
-bool isRaceFinished() {
+boolean isRaceFinished() {
   return player1.isWinner || player2.isWinner;
 }
 
