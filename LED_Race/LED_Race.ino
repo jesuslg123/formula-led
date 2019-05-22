@@ -3,7 +3,7 @@
 #include "constants.h"
 #include "player.h"
 #include "draw.h"
-//#include "melody.h"
+#include "melody.h"
 #include "mqtt.h"
 #include "wifi.h"
 
