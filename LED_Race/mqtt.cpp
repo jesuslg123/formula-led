@@ -31,7 +31,7 @@ void connectMQTT() {
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
 
-      client.publish("topic_track", "Connected!!!!!");
+      client.publish(topic_track, "Debug");
       //client.subscribe("topic_track");
       
     } else {
