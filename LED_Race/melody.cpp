@@ -6,6 +6,7 @@ char s[4];
 void sendMessage(char msg, int playerId, float playerSpeed) {
   Serial.write("<");
   Serial.write(msg);
+  Serial.write(", ");
   Serial.print(playerId);
   Serial.print(", ");
   Serial.write(dtostrf(playerSpeed, 3, 2, s));

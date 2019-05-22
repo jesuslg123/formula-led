@@ -91,6 +91,15 @@ void parseData() {      // split the data into its parts
 //============
 
 void showParsedData() {
+  // debug (rebuild message)
+//  Serial.print("<");
+//  Serial.print(message[0]);
+//  Serial.print(", ");
+//  Serial.print(playerId);
+//  Serial.print(", ");
+//  Serial.print(playerSpeed);
+//  Serial.println(">");
+  
   if (message[0] == 'P') {
     playerBeep(playerId, playerSpeed);
   } else if (message[0] == 'S') {
@@ -98,11 +107,4 @@ void showParsedData() {
   } else if (message[0] == 'W') {
     flagPoleFanfare();
   }
-
-  //  Serial.print("Message ");
-  //  Serial.println(message);
-  //  Serial.print("Player ");
-  //  Serial.println(playerId);
-  //  Serial.print("Speed ");
-  //  Serial.println(playerSpeed);
 }

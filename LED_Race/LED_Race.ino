@@ -10,7 +10,7 @@
 struct Player player1;
 struct Player player2;
 
-int raceCountdown = 3;
+int raceCountdown = 0;
 boolean raceFinished = false;
 
 void setup() {
@@ -30,16 +30,17 @@ void setup() {
 
 void loop() {
   connectMQTT();
-  if (raceCountdown >= 0) {
+  
+  if (raceCountdown < 4) {
     drawCountdown(raceCountdown);
-    raceStartSound(3 - raceCountdown);
+    raceStartSound(raceCountdown);
     delay(1000);
 
-    if (raceCountdown == 0) {
+    if (raceCountdown == 3) {
       mqttStart();
     }
     
-    raceCountdown--;
+    raceCountdown++;
     return;
   }
   
