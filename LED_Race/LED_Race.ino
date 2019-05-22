@@ -3,7 +3,9 @@
 #include "constants.h"
 #include "player.h"
 #include "draw.h"
-#include "melody.h"
+//#include "melody.h"
+#include "mqtt.h"
+#include "wifi.h"
 
 struct Player player1;
 struct Player player2;
@@ -12,18 +14,25 @@ int raceCountdown = 3;
 bool raceFinished = false;
 
 void setup() {
+  
+  Serial.begin(9600);
+
+  Serial.printf("Setup");
+  
+  connectWifi();
+  setupMQTT();
+  
   initPlayer(&player1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
   initPlayer(&player2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
 
   setupTrack();
-
-  Serial.begin(9600);
 }
 
 void loop() {
+  connectMQTT();
   if (raceCountdown >= 0) {
     drawCountdown(raceCountdown);
-    int noteDuration = raceStartSound(3 - raceCountdown);
+    int noteDuration = 300;//raceStartSound(3 - raceCountdown);
     delay(noteDuration + 700);
     
     raceCountdown--;
@@ -40,14 +49,14 @@ void loop() {
   drawPlayer(&player1);
   drawPlayer(&player2);
 
-  playerBeep(1, player1.speed);
-  playerBeep(2, player2.speed);
+  //playerBeep(1, player1.speed);
+  //playerBeep(2, player2.speed);
 
   if (isRaceFinished()) {
     struct Player winner = findWinner(player1, player2);
     drawWinner(&winner);
     raceFinished = true;
-    flagPoleFanfare();
+    //flagPoleFanfare();
   }
 
   delay(15);
