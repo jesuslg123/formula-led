@@ -49,6 +49,8 @@ def handle_mqtt_message(client, userdata, message):
         payload=message.payload.decode()
     )
 
+    print("message:", data)
+
     if data['topic'] == "track":
         process_track_message(data)
 
@@ -85,12 +87,10 @@ def process_track_message(data):
         socketio.emit('track', {'data': data})
 
 def process_player_message(data):
-    print("player data", data)
 
     command = json.loads(data['payload'])
     player_value = command['player']
     loop_value = command['loop']
-
     loop_end_time = time.time()
     elapsed_loop_time = round(loop_end_time - race_start_time[0], 2)
 
@@ -99,3 +99,6 @@ def process_player_message(data):
     data['loop_time'] = elapsed_loop_time
 
     socketio.emit('player', {'data': data})
+
+if __name__ == '__main__':
+    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=True, debug=True)
