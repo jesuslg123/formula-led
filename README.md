@@ -47,3 +47,38 @@ You will need:
   * Fritzing (http://fritzing.org/download/)
 
 Follow the designs in: [Schemas](./Schemas)
+
+## A real-time race event board
+
+We want to display the race progress in real time on a race board. To do this we are using Flask, (http://flask.pocoo.org/), and mqtt-messages.
+
+##### Requirements
+
+`Python3` and `pip` are installed.
+
+Create your virtual environment.
+
+`<venv>` in this case is the path to your virtual environment. (For simplicity, this can just be `venv`)
+
+```
+python3 -m venv <venv>
+```
+
+##### Local Development
+
+##### Local, Local
+
+To activate the virtual environment:
+
+```
+source <venv>/bin/activate
+```
+
+To run the application:
+
+```
+export FLASK_APP=race_events
+export FLASK_ENV=development
+pip install -e .
+flask run
+```
