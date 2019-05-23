@@ -1,12 +1,15 @@
 $(document).ready(function(){
   //connect to the socket server.
+  console.log("hello");
   var socket = io.connect('http://' + document.domain + ':' + location.port);
 
   // handle messages with 'track' topic
   socket.on('track', function(msg) {
     var message = msg.data.command_value;
+    console.log("message:", message);
 
     if (message == "start") {
+      console.log("we got start")
       $('#start').html(message);
     }
 
