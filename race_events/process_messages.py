@@ -88,17 +88,24 @@ def process_track_message(data):
 
 def process_player_message(data):
 
+    print("you sent a message with topic player")
     command = json.loads(data['payload'])
     player_value = command['player']
-    loop_value = command['loop']
-    loop_end_time = time.time()
-    elapsed_loop_time = round(loop_end_time - race_start_time[0], 2)
-
     data['player_value'] = player_value
-    data['loop_value'] = loop_value
-    data['loop_time'] = elapsed_loop_time
 
-    socketio.emit('player', {'data': data})
+    if 'loop' in command:
+        loop_value = command['loop']
+        loop_end_time = time.time()
+        elapsed_loop_time = round(loop_end_time - race_start_time[0], 2)
+        data['loop_value'] = loop_value
+        data['loop_time'] = elapsed_loop_time
+        socketio.emit('player', {'data': data})
+
+    if 'speed' in command:
+         speed_value = command['speed']
+         data['speed_value'] = speed_value
+         print("speed value, ", speed_value)
+         socketio.emit('player', {'data': data})
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, use_reloader=True, debug=True)

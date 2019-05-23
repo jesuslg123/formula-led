@@ -1,6 +1,5 @@
 $(document).ready(function(){
   //connect to the socket server.
-  console.log("hello");
   var socket = io.connect('http://' + document.domain + ':' + location.port);
 
   // handle messages with 'track' topic
@@ -10,6 +9,13 @@ $(document).ready(function(){
 
     if (message == "start") {
       console.log("we got start")
+      $('#end').html("");
+      $('#elapsed').html("");
+      $('#player_one_loop').html("");
+      $('#player_two_loop').html("");
+      $('#player_one_speed').html("");
+      $('#player_two_speed').html("");
+      $('#winner').html("");
       $('#start').html(message);
     }
 
@@ -24,16 +30,29 @@ $(document).ready(function(){
   // handle messages with the 'player' topic
   socket.on('player', function(msg) {
 
+    console.log("player, ", msg)
+
     var player = msg.data.player_value;
     var loop = msg.data.loop_value;
-    var loop_time = msg.data.loop_time
+    var loop_time = msg.data.loop_time;
+    var speed = msg.data.speed_value;
 
-    if (player == "1") {
-      $('#player_one_loop ').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
+    if (player === "1") {
+      if (loop !== undefined || "") {
+        $('#player_one_loop').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
+      } else {
+        console.log("player one speed ", speed);
+        $('#player_one_speed').html(speed)
+      }
     }
 
-    if (player == "2") {
-      $('#player_two_loop ').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
+    if (player === "2") {
+      if (loop !== undefined || "") {
+        $('#player_two_loop').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
+      } else {
+        console.log("player one speed ", speed);
+        $('#player_two_speed').html(speed)
+      }
     }
   });
 });
