@@ -1,35 +1,65 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script src="static/js/application.js"></script>
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
-
-<body>
-
-<div class="container" id="content">
-    <div class="row">
-      <h2>WOWOW</h2>
-      <h3>The Race Events:</h3>
-      <div id="start">
-      </div> <!-- /#start -->
-      <div id="player_one_loop">
-      </div> <!-- /#loop two -->
-      <div id="player_two_loop">
-      </div> <!-- /# loop one -->
-      <div id="end">
-      </div> <!-- /#end -->
-      <h3>WINNER:</h3>
-      <div id="winner">
-      </div> <!-- /#winner -->
-      <h3>TOTAL TIME:</h3>
-      <div id='elapsed'>
-      </div> <!-- /#elapsed-->
-  </div>
-</div>
-
-
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="container" id="content">
+        <div class="row">
+          <h2
+            style="color:#007575;font-size:46px;font-weight:bold;font-family:verdana;text-align:center;"
+          >
+            Formula LED
+          </h2>
+          <h3
+            style="width:100%;text-align:left;font-family:verdana;font-size:24px;color:#007575;text-align:center;"
+          >
+            The Race Events:
+          </h3>
+          <div
+            style="border: 2px solid black;border-style: dotted;border-radius: 25px;text-align:center;margin:0 120px;"
+          >
+            <div id="start" style="padding: 4px;">
+              whatever here is going on
+            </div>
+            <!-- /#start -->
+            <div id="player_one_loop" style="padding: 4px;">hu</div>
+            <!-- /#loop two -->
+            <div id="player_two_loop"></div>
+            <!-- /# loop one -->
+            <div id="end"></div>
+            <!-- /#end -->
+          </div>
+          <h3
+            style="text-align:center;font-family:verdana;color:#007575;font-size:24px;"
+          >
+            Champion of the Xing New Work Race:
+          </h3>
+          <div id="winner">
+            <!-- /#winner -->
+            <img
+              src="/static/images/Roadrunner.jpg"
+              alt="Wile.E.Coyote and
+          Roadrunner"
+            />
+          </div>
+          <h3
+            style="text-align:center;font-family:verdana;color:#007575;font-size:24px;"
+          >
+            Total Race Time:
+          </h3>
+          <div id="elapsed"></div>
+          <!-- /#elapsed-->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
