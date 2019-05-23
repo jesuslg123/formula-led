@@ -5,11 +5,11 @@
 from flask_socketio import SocketIO, emit
 from flask_mqtt import Mqtt
 from flask import Flask, render_template, url_for, copy_current_request_context
+from race_events import app
 from time import sleep
 import time
 import json
 
-app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['MQTT_BROKER_URL'] = '127.0.0.1'
 app.config['MQTT_BROKER_PORT'] = 1883
@@ -99,6 +99,3 @@ def process_player_message(data):
     data['loop_time'] = elapsed_loop_time
 
     socketio.emit('player', {'data': data})
-
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=True, debug=True)
