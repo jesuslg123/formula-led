@@ -31,14 +31,14 @@ void clearTrack() {
 
 void drawCountdown(int countdownStage) {
   switch (countdownStage) {
-    case 3:
-      setTrackColor(CRGB::Blue);
-      break;
     case 2:
-      setTrackColor(CRGB::Red);
+      setTrackColor(CRGB::Green);
       break;
     case 1:
-      setTrackColor(CRGB::Green);
+      setTrackColor(CRGB::Red);
+      break;
+    case 0:
+      setTrackColor(CRGB::Blue);
       break;
     default:
       clearTrack();

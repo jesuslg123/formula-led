@@ -4,8 +4,6 @@
 #include "player.h"
 #include "draw.h"
 #include "melody.h"
-#include "mqtt.h"
-#include "wifi.h"
 
 struct Player player1;
 struct Player player2;
@@ -14,13 +12,8 @@ int raceCountdown = 0;
 boolean raceFinished = false;
 
 void setup() {
-  
   Serial.begin(9600);
-
-  Serial.printf("Setup");
-  
-  connectWifi();
-  setupMQTT();
+  setupSpeaker();
   
   initPlayer(&player1, 1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
   initPlayer(&player2, 2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
@@ -29,18 +22,18 @@ void setup() {
 }
 
 void loop() {
-  connectMQTT();
-  
-  if (raceCountdown < 4) {
+  if (raceCountdown <= 3) {
     drawCountdown(raceCountdown);
     raceStartSound(raceCountdown);
-    delay(1000);
 
-    if (raceCountdown == 3) {
-      mqttStart();
-    }
+    delay(1000);
     
     raceCountdown++;
+
+    if (raceCountdown == 3) {
+      Serial.println("<S, 0, 0>");  
+    }
+    
     return;
   }
   
@@ -117,14 +110,15 @@ void movePlayer(struct Player *player) {
 
   if (player->position < player->prevPosition) {
     player->loop += 1;
-    mqttLoop(*player);
+    Serial.println("<L, " + (String)(player->id) + ", " + (String)(player->loop) + ">");
   }
 
   if (player->loop == MAX_LOOPS) {
     player->isWinner = true;
-    mqttEnd(*player);
+    Serial.println("<W, " + (String)(player->id) + ", 0>");
   }
-  //  Serial.println("Speed: " + (String)player->speed + " Position: " + (String)player->position + " P1: " + (String)player1.loop + " P2: " + (String)player2.loop);
+
+  Serial.println("<P, " + (String)(player->id) + ", " + (String)(player->speed) + ">");
 }
 
 boolean isRaceFinished() {
