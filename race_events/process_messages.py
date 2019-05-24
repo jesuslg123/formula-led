@@ -1,3 +1,5 @@
+# expected messages format:
+
 # data: {'topic': 'track', 'payload': '{command: start}'}
 # data: {'topic': 'player', 'payload': '{command: end, player: 1, loop: 1}'}
 # data: {'topic': 'track', 'payload': '{command: end, winner: 1 }'}
