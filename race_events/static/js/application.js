@@ -5,10 +5,8 @@ $(document).ready(function(){
   // handle messages with 'track' topic
   socket.on('track', function(msg) {
     var message = msg.data.command_value;
-    console.log("message:", message);
 
     if (message == "start") {
-      console.log("we got start")
       $('#end').html("");
       $('#elapsed').html("");
       $('#player_one_loop').html("");
@@ -30,8 +28,6 @@ $(document).ready(function(){
   // handle messages with the 'player' topic
   socket.on('player', function(msg) {
 
-    console.log("player, ", msg)
-
     var player = msg.data.player_value;
     var loop = msg.data.loop_value;
     var loop_time = msg.data.loop_time;
@@ -41,7 +37,6 @@ $(document).ready(function(){
       if (loop !== undefined || "") {
         $('#player_one_loop').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
       } else {
-        console.log("player one speed ", speed);
         $('#player_one_speed').html(speed)
       }
     }
@@ -50,7 +45,6 @@ $(document).ready(function(){
       if (loop !== undefined || "") {
         $('#player_two_loop').html("Player " + player + " just completed loop " + loop + " in " + loop_time + " seconds!");
       } else {
-        console.log("player one speed ", speed);
         $('#player_two_speed').html(speed)
       }
     }
