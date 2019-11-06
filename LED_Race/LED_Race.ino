@@ -12,6 +12,9 @@ int raceCountdown = 0;
 boolean raceFinished = false;
 
 void setup() {
+  pinMode(PLAYER1_PIN,INPUT_PULLUP); 
+  pinMode(PLAYER2_PIN,INPUT_PULLUP);  
+
   Serial.begin(9600);
   setupSpeaker();
   
