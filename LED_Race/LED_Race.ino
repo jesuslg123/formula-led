@@ -42,6 +42,13 @@ void loop() {
   
   if (raceFinished) {
     delay(1000);
+    raceCountdown++;
+    if (raceCountdown == 8) {
+      raceCountdown = 0;
+      raceFinished = false;
+      initPlayer(&player1, 1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
+      initPlayer(&player2, 2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
+    }
     return;
   }
 
