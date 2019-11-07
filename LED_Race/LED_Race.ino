@@ -9,6 +9,7 @@ struct Player player1;
 struct Player player2;
 
 int raceCountdown = 0;
+boolean raceStarting = true;
 boolean raceFinished = false;
 
 void setup() {
@@ -25,33 +26,42 @@ void setup() {
 }
 
 void loop() {
-  if (raceCountdown <= 3) {
-    drawCountdown(raceCountdown);
-    raceStartSound(raceCountdown);
-
-    delay(1000);
-    
-    raceCountdown++;
-
-    if (raceCountdown == 3) {
-      Serial.println("<S, 0, 0>");  
-    }
-    
-    return;
+  if (raceStarting) {
+      doRaceStartSequence();
+  } else if (raceFinished) {
+      doRaceEndingSequence();
+  } else {
+      doRaceRun();
   }
+}
+
+void doRaceStartSequence() {
+  drawCountdown(raceCountdown);
+  raceStartSound(raceCountdown);
+
+  delay(1000);
+
+  raceCountdown++;
+
+  if (raceCountdown == 3) {
+    Serial.println("<S, 0, 0>");  
+    raceStarting = false;
+    raceCountdown = 0;
+  }
+}
   
-  if (raceFinished) {
+void doRaceEndingSequence() {
     delay(1000);
     raceCountdown++;
-    if (raceCountdown == 8) {
-      raceCountdown = 0;
+    if (raceCountdown == 5) {
       raceFinished = false;
+      raceCountdown = 0;
       initPlayer(&player1, 1, PLAYER1_PIN, CRGB::Red, CRGB::Green);
       initPlayer(&player2, 2, PLAYER2_PIN, CRGB::Blue, CRGB::Yellow);
     }
-    return;
-  }
+}
 
+void doRaceRun() {
   movePlayer(&player1);
   movePlayer(&player2);
   drawPlayer(&player1);
